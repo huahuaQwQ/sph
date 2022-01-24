@@ -6,7 +6,8 @@
       <h2 class="all">全部商品分类</h2>
       <!-- 三级联动 -->
       <div class="sort">
-        <div class="all-sort-list2">
+        <!-- 利用事件的委派+编程式导航 -->
+        <div class="all-sort-list2" @click="goSearch">
           <div
             class="item"
             v-for="(c1, index) in categoryList"
@@ -14,11 +15,14 @@
             :class="{ cur: currentIndex == index }"
           >
             <h3 @mouseenter="changeIndex(index)">
-              <a href="">{{ c1.categoryName }}</a>
+              <a >{{ c1.categoryName }}</a>
             </h3>
             <!-- 二级、三级分类 -->
             <!-- 当currentIndex == index时 -->
-            <div class="item-list clearfix" :style="{display:currentIndex == index ? 'block' : 'none'}">
+            <div
+              class="item-list clearfix"
+              :style="{ display: currentIndex == index ? 'block' : 'none' }"
+            >
               <div
                 class="subitem"
                 v-for="(c2, index) in c1.categoryChild"
@@ -26,14 +30,14 @@
               >
                 <dl class="fore">
                   <dt>
-                    <a href="">{{ c2.categoryName }}</a>
+                    <a >{{ c2.categoryName }}</a>
                   </dt>
                   <dd>
                     <em
                       v-for="(c3, index) in c2.categoryChild"
                       :key="c3.categoryId"
                     >
-                      <a href="">{{ c3.categoryName }}</a>
+                      <a >{{ c3.categoryName }}</a>
                     </em>
                   </dd>
                 </dl>
@@ -58,6 +62,7 @@
 
 <script>
 import { mapState } from "vuex";
+import throttle from "lodash/throttle";
 export default {
   name: "TypeNav",
   data() {
@@ -80,10 +85,11 @@ export default {
   },
   methods: {
     //一级分类鼠标进入 修改响应式数据currentIndex属性
-    changeIndex(index) {
+    changeIndex: throttle(function (index) {
       //index:鼠标移到某一个一级分类的元素索引值
+      //_.throttle 节流方法
       this.currentIndex = index;
-    },
+    }, 50),
     //一级分类鼠标移出去的事件回调
     leaveIndex() {
       this.currentIndex = -1;
