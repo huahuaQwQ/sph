@@ -1,7 +1,8 @@
 <template>
   <div>
-      <h1>params参数{{$route.params.keyword}}==={{keyword}}</h1>
-      <h1>query参数{{$route.query.k}}</h1>
+      <!-- 这是search模块 -->
+      <h1>哈哈哈</h1>
+      <TypeNav/>
   </div>
 </template>
 
@@ -9,7 +10,6 @@
 export default {
   name:'',
   //路由组件可以传递props
-  props:['keyword']
 }
 </script>
 

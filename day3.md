@@ -28,7 +28,17 @@ home跳转search：一级分类会把用户选中的产品（name，id），和�
 路由跳转：
 1.声明式导航 router-link     每一次都会出现组件 1000个组件就会有卡顿现象 不推荐！
 2.编程式导航 <a @click="goSearch">  循环1000次就有1000个回调函数       不推荐！
-3.编程式导航  事件委派
-    如果使用事件委派会存在很多问题：1.如何判断点击的一定是a标签 2.如何获取参数（1、2、3级产品的name，id）
+3.编程式导航  事件委派：就是把全部子节点（h3、dt、dl、em）事件委派给父亲节点
+    如果使用事件委派会存在很多问题：
+    1.如何判断点击的一定是a标签
+        1）如果点击的是a标签，怎么判断是一级、二级、三级分类
+        答：添加自定义属性 :data-categoryName
+            节点有dataset属性可以获取自定义属性
+    2.如何获取参数（1、2、3级产品的name，id）
+    答：加自定义属性:data-category1Id="c1.categoryid"
+                   :data-category2Id="c2.categoryid"
+                   :data-category3Id="c3.categoryid"
+
 
 7.完成三级联动路由跳转 传参
+    this.$router.push({name:"search",query:{categoryName:'xxx',category2id:'xx'}})
