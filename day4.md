@@ -8,3 +8,32 @@
 
 1.开发search组件中TypeNav商品分类菜单（过渡动画效果）
 路径判断是否是/home
+过渡动画必须要有 v-if v-show指令的外面包裹着<transition></transition>标签
+<transition name="sort">
+</transition>
+那就不能v-开头，必须sort-开头
+//过渡动画的样式 css样式less
+//过渡动画进入开始
+.sort-enter{
+    height: 0px;
+    opacity: 0;
+}
+//过渡动画进入结束
+.sort-enter-to{
+    height: 461px;
+    opacity: 1;
+}
+//定义动画时间、速率
+.sort-enter-active{
+    transition: all .5s linear;
+}
+
+2.性能优化
+把TypeNav的mounted函数里
+//向vuex发请求，获取数据，存储于仓库
+this.$store.dispatch("categoryList");
+转移到App.vue的mounted函数里(App.vue发请求的根组件mounted只会执行一次)
+
+3.合并params和query参数
+
+4.home首页组件

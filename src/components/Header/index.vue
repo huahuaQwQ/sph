@@ -27,7 +27,7 @@
     <!--头部第二行 搜索区域-->
     <div class="bottom">
       <h1 class="logoArea">
-        <router-link class="logo" to="/home" >
+        <router-link class="logo" to="/home">
           <img src="./images/logo.png" alt="" />
         </router-link>
       </h1>
@@ -39,7 +39,11 @@
             class="input-error input-xxlarge"
             v-model="keyword"
           />
-          <button class="sui-btn btn-xlarge btn-danger" type="button" @click="goSeach">
+          <button
+            class="sui-btn btn-xlarge btn-danger"
+            type="button"
+            @click="goSearch"
+          >
             搜索
           </button>
         </form>
@@ -50,25 +54,25 @@
 
 <script>
 export default {
-    name:'Header',
-    data() {
-      return {
-        keyword:""
+  name: "Header",
+  data() {
+    return {
+      keyword: "",
+    };
+  },
+  methods: {
+    //搜索按钮回调函数：向search路由组件跳转
+    goSearch() {
+      if (this.$route.query) {
+        let location = {
+          name: "search",
+          params: { keyword: this.keyword || undefined },
+        };
+        location.query = this.$route.query;
+        this.$router.push(location);
       }
     },
-    methods: {
-      //搜索按钮回调函数：向search路由组件跳转
-      goSeach(){
-        //路由传递参数：
-        //1.字符串形式
-        // this.$router.push('/search/'+this.keyword+'?k='+this.keyword.toUpperCase())
-        //2.模板字符串
-        // this.$router.push(`/search/${this.keyword}?k=${this.keyword.toUpperCase()}`)
-        //3.对象
-        this.$router.push({name:"search",params:{keyword:this.keyword||undefined},query:{k:this.keyword.toUpperCase()}},()=>{},()=>{})
-        
-      }
-    },
+  },
 };
 </script>
 
