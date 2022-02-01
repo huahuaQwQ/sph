@@ -36,4 +36,21 @@ this.$store.dispatch("categoryList");
 
 3.合并params和query参数
 
-4.home首页组件
+4.home首页组件 ListContainer组件与Floor组件
+服务器返回的数据只有商品分类数据
+mock数据（模拟数据）：mockjs   mock数据会被浏览器拦截[在Chrome开发者中network看不到]，不会进入服务器
+cnpm install --save mockjs
+
+    使用步骤：
+    1)在src创建mock文件夹
+    2)准备json数据，格式化一下
+    3)mock需要的图片放在public/images中（public文件夹在打包时，会把全部资源打包到dist文件夹）
+    4)在mock文件夹下创建mockServe.js通过mock插件实现模拟数据
+    5)mockServe.js在入口文件main.js引入，执行。
+
+
+5.ListContainer组件开发
+安装swiper@5
+    1）引入（js与css）
+    2）页面结构一定先有
+    3）new Swiper实例

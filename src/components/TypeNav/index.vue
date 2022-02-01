@@ -88,10 +88,9 @@ export default {
   },
   //组件挂载完毕:服务器发请求
   mounted() {
-    
     //挂载完毕后，让show属性变成false【search组件需要】
     //判断路由路径,如果不是home就隐藏三级分类
-    console.log(this.$route.path);
+    // console.log(this.$route.path);
     if (this.$route.path != "/home") {
       this.show = false;
     }
