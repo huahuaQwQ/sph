@@ -1,5 +1,5 @@
 //登录 注册模块
-import { reqGetPhoneCode, reqUserRegister, reqUserLoign, reqUserInfo, reqLogout } from '@/api';
+import { reqGetPhoneCode, reqUserRegister, reqUserLogin, reqUserInfo, reqLogout } from '@/api';
 import { setToken, getToken, removeToken } from '@/utils/token';
 //服务器邮箱发送
 // import sendEmailCode from '@/fwq/emailsend';
@@ -68,7 +68,7 @@ const actions = {
     },
     //用户登录
     async userLogin({ commit }, data) {
-        let result = await reqUserLoign(data);
+        let result = await reqUserLogin(data);
         // console.log(result);
         //服务器下发token，用户唯一标识符
         //将来通过带token找服务器要用户信息进行展示
