@@ -50,19 +50,40 @@ export default [
         path: "/paysuccess",
         name: 'PaySuccess',
         component: PaySuccess,
-        meta: { show: true }
+        meta: { show: true },
+
     },
     {
         path: "/pay",
         name: 'Pay',
         component: Pay,
-        meta: { show: true }
+        meta: { show: true },
+        //路由独享守卫
+        beforeEnter: (to, from, next) => {
+            //只有交易页面能去支付页面
+            if (from.path == '/trade' || from.path == "/") {
+                next();
+            } else {
+                //其他的路由组件去不了支付页面
+                next(from.path);
+            }
+        }
     },
     {
         path: "/trade",
         name: 'Trade',
         component: Trade,
-        meta: { show: true }
+        meta: { show: true },
+        //路由独享守卫
+        beforeEnter: (to, from, next) => {
+            //去交易页面只能从购物车页面去！
+            if (from.path == '/shopcart' || from.path == "/") {
+                next();
+            } else {
+                //其他的路由组件去不了交易页面
+                next(from.path);
+            }
+        }
     },
     {
         path: "/shopcart",

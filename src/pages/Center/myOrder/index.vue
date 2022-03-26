@@ -195,10 +195,7 @@ export default {
       this.getData();
     }
   },
-  props: {},
-  computed: {},
-  watch: {},
-  components: {},
+  
 };
 </script>
 
