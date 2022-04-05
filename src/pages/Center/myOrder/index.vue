@@ -98,7 +98,7 @@
           <Pagination
             :pageNo="page"
             :pageSize="limit"
-            :total="myorder.total"
+            :total="myOrder.total"
             :continues="5"
             @getPageNo="getPageNo"
           />
