@@ -65,6 +65,16 @@ http://xxx.xxx:8080/api
 要使用http://39.98.123.211 地址请求api
 
 解决方案：jsonp、cros、代理
+在vue.config,js里，代理跨域
+devServer: {
+    proxy: {
+        "/api": {
+            target: "http://39.98.123.211",
+            // pathRewrite: { "^/api": "" }   不需要路径重写，因为已经有/api了
+        }
+    }
+}
+
 
 8、 nprogress进度条使用
 不但要引入nprogress，还要引入nprogress.css

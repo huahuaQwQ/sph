@@ -2,50 +2,64 @@
   <!-- 商品分类导航 -->
   <div class="type-nav">
     <!-- 事件委派leaveIndex() 鼠标离开一级分类样式还在，离开‘全部商品分类’才消失-->
-    <div class="container" @mouseleave="leaveIndex()">
+    <div class="container" @mouseleave="leaveshow" @mouseenter="entershow">
       <h2 class="all">全部商品分类</h2>
-      <!-- 三级联动 -->
-      <div class="sort">
-        <!-- 利用事件的委派+编程式导航 -->
-        <div class="all-sort-list2" @click="goSearch">
-          <div
-            class="item"
-            v-for="(c1, index) in categoryList"
-            :key="c1.categoryId"
-            :class="{ cur: currentIndex == index }"
-          >
-            <h3 @mouseenter="changeIndex(index)">
-              <a >{{ c1.categoryName }}</a>
-            </h3>
-            <!-- 二级、三级分类 -->
-            <!-- 当currentIndex == index时 -->
+      <!-- 三级联动;过渡动画 -->
+      <transition name="sort"> 
+        <div class="sort" v-show="show">
+          <!-- 利用事件的委派+编程式导航实现路由的跳转与传递参数 -->
+          <div class="all-sort-list2" @click="goSearch">
             <div
-              class="item-list clearfix"
-              :style="{ display: currentIndex == index ? 'block' : 'none' }"
+              class="item"
+              v-for="(c1, index) in categoryList"
+              :key="c1.categoryId"
+              :class="{ cur: currentIndex == index }"
             >
+              <h3 @mouseenter="changeIndex(index)">
+                <a
+                  :data-categoryName="c1.categoryName"
+                  :data-category1Id="c1.categoryid"
+                  >{{ c1.categoryName }}</a
+                >
+              </h3>
+              <!-- 二级、三级分类 -->
+              <!-- 当currentIndex == index时 -->
               <div
-                class="subitem"
-                v-for="(c2, index) in c1.categoryChild"
-                :key="c2.categoryId"
+                class="item-list clearfix"
+                :style="{ display: currentIndex == index ? 'block' : 'none' }"
               >
-                <dl class="fore">
-                  <dt>
-                    <a >{{ c2.categoryName }}</a>
-                  </dt>
-                  <dd>
-                    <em
-                      v-for="(c3, index) in c2.categoryChild"
-                      :key="c3.categoryId"
-                    >
-                      <a >{{ c3.categoryName }}</a>
-                    </em>
-                  </dd>
-                </dl>
+                <div
+                  class="subitem"
+                  v-for="(c2, index) in c1.categoryChild"
+                  :key="c2.categoryId"
+                >
+                  <dl class="fore">
+                    <dt>
+                      <a
+                        :data-categoryName="c2.categoryName"
+                        :data-category2Id="c2.categoryId"
+                        >{{ c2.categoryName }}</a
+                      >
+                    </dt>
+                    <dd>
+                      <em
+                        v-for="(c3, index) in c2.categoryChild"
+                        :key="c3.categoryId"
+                      >
+                        <a
+                          :data-categoryName="c3.categoryName"
+                          :data-category3Id="c3.categoryId"
+                          >{{ c3.categoryName }}</a
+                        >
+                      </em>
+                    </dd>
+                  </dl>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </transition>
       <nav class="nav">
         <a href="###">服装城</a>
         <a href="###">美妆馆</a>
@@ -69,12 +83,17 @@ export default {
     return {
       //存储用户鼠标移到哪个一级分类
       currentIndex: -1,
+      show: true,
     };
   },
   //组件挂载完毕:服务器发请求
   mounted() {
-    //向vuex发请求，获取数据，存储于仓库
-    this.$store.dispatch("categoryList");
+    //挂载完毕后，让show属性变成false【search组件需要】
+    //判断路由路径,如果不是home就隐藏三级分类
+    // console.log(this.$route.path);
+    if (this.$route.path != "/home") {
+      this.show = false;
+    }
   },
   computed: {
     ...mapState({
@@ -90,9 +109,49 @@ export default {
       //_.throttle 节流方法
       this.currentIndex = index;
     }, 50),
-    //一级分类鼠标移出去的事件回调
-    leaveIndex() {
+    //一级分类鼠标移出去的事件回调;鼠标离开"全部商品分类"时，隐藏商品分类 show = false
+    leaveshow() {
       this.currentIndex = -1;
+      //路径判断:如果是search路由组件时才会执行
+      if (this.$route.path != "/home") {
+        this.show = false;
+      }
+    },
+    //路由跳转到search组件 携带query参数
+    goSearch(event) {
+      //编程式导航+事件委派    详细看day3.md 第6点
+      let element = event.target;
+      //节点有dataset属性可以获取自定义属性
+      let { categoryname, category1id, category2id, category3id } = element.dataset;
+      if (categoryname) {
+        //整理路由跳转参数
+        let location = { name: "search" };
+        let query = { categoryName: categoryname };
+        //一级、二级、三级分类a标签
+        if (category1id) {
+          query.category1Id = category1id;
+        } else if (category2id) {
+          query.category2Id = category2id;
+        } else if (category3id) {
+          query.category3Id = category3id;
+        }
+        
+        //判断：如果路由跳转时，带有params参数，一起传递过去
+        if(this.$route.params){
+          location.params = this.$route.params;
+          //动态给location配置对象添加query属性
+          location.query = query;
+          //路由跳转
+          this.$router.push(location);
+
+        }
+      }
+    },
+    //鼠标进入"全部商品分类"时，显示商品分类 show = ture
+    entershow() {
+      if (this.$route.path != "/home") {
+        this.show = true;
+      }
     },
   },
 };
@@ -130,7 +189,6 @@ export default {
     }
 
     .sort {
-      position: absolute;
       left: 0;
       top: 45px;
       width: 210px;
@@ -138,6 +196,8 @@ export default {
       position: absolute;
       background: #fafafa;
       z-index: 999;
+      //BFC规范
+      //overflow: hidden;
 
       .all-sort-list2 {
         .item {
@@ -218,6 +278,22 @@ export default {
           background: skyblue;
         }
       }
+    }
+
+    //过渡动画的样式
+    //过渡动画进入开始
+    .sort-enter{
+      height: 0px;
+      opacity: 0;
+    }
+    //过渡动画进入结束
+    .sort-enter-to{
+      height: 461px;
+      opacity: 1;
+    }
+    //定义动画时间、速率
+    .sort-enter-active{
+      transition: all .5s linear;
     }
   }
 }

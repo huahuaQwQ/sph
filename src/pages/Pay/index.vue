@@ -135,6 +135,7 @@ export default {
        * QRCode.toDataURL()返回是Promise对象
        */
       let url = await QRCode.toDataURL(this.payInfo.codeUrl);
+      
       //弹框
       this.$alert(`<img src=${url} />`, "请使用微信支付", {
         //是否将 message 属性作为 HTML 片段处理

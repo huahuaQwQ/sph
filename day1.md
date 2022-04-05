@@ -106,6 +106,7 @@ footer组件：在login和register是隐藏的
 
 6.1可以判断组件的$route的path属性路径来判断显示和隐藏（弊端：组件很多很累）
 6.2可以配置路由元信息[meta]，给$route添加属性meta的key-value字段，来判断显示和隐藏。
+    在router/index.js中配置
 
 8.路由传参
 8.1 路由跳转有声明式导航和编程式导航
@@ -117,19 +118,28 @@ query参数：不属于路径，类似AJAX的querySting  例子：/home?k=v&kv=,
 
 9.路由传参面试题
 1.路由传参（对象写法）path可以结合params参数使用吗？
-答：不可以，对象写法需要有name、path属性（name必须有）。
+    答：不可以，对象写法需要有name、path属性（name必须有）。
 2.如何指定params参数可传可不传？
-答：在配置路由（router/index.js）时，占位后面加？【表示params可传可不传】
+    答：在配置路由（router/index.js）时，占位后面加？【表示params可传可不传】
 3.params参数传递空串怎么解决？
-答：使用undefined解决params参数传递空串情况
+    答：使用undefined解决params参数传递空串情况
 4.路由组件能不能传递props数据？
-能，有三种写法：布尔值、对象、函数
-布尔值写法:params
-props:true,
-对象写法:额外给路由组件传参
-props:{a:1,b:2},
-函数写法:可以把params参数和query参数传递给路由组件
-props:($route)=> ({keyword:$route.params.keyword,k:$route.query.k})
+    答：能，有三种写法：布尔值、对象、函数
+    布尔值写法:params
+    props:true,
+    对象写法:额外给路由组件传参
+    props:{a:1,b:2},
+    函数写法:可以把params参数和query参数传递给路由组件
+    props:($route)=> ({keyword:$route.params.keyword,k:$route.query.k})
+
+
+//路由传递参数：
+//1.字符串形式
+// this.$router.push('/search/'+this.keyword+'?k='+this.keyword.toUpperCase())
+//2.模板字符串
+// this.$router.push(`/search/${this.keyword}?k=${this.keyword.toUpperCase()}`)
+//3.对象
+//this.$router.push({name:"search",params:{keyword:this.keyword||undefined},query:{k:this.keyword.toUpperCase()}},()=>{},()=>{})
 
 
 
